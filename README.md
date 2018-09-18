@@ -1,1 +1,1 @@
-# Algorithms-that-data-science-easy
+# Algorithms-that-makes-data-science-easy
