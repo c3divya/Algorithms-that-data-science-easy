@@ -1,0 +1,27 @@
+/----Function to find the negative correlation and position correlation in the huge correlation table---/
+/--By putting the negative threshold value user will get columns having negative correlation with other columns----/
+/-----By Putting positive threshold value uiser will get positive corr result--/
+
+def find_neg_cor_columns(data, threshold):
+    corr_matrix=data.corr()
+    #Removing the elements of other side of diagonal
+    corr_matrix.loc[:,:]=np.tril(corr_matrix,k=-1)
+    already_in = set()
+    result = []
+    if threshold>=0:
+        for col in corr_matrix:
+            perfect_corr = corr_matrix[col][corr_matrix[col] > threshold].index.tolist()
+            if perfect_corr and col not in already_in:
+                already_in.update(set(perfect_corr))
+                perfect_corr.append(col)
+                result.append(perfect_corr)
+    elif threshold<0:
+        for col in corr_matrix:
+            perfect_corr = corr_matrix[col][corr_matrix[col] < threshold].index.tolist()
+            if perfect_corr and col not in already_in:
+                already_in.update(set(perfect_corr))
+                perfect_corr.append(col)
+                result.append(perfect_corr)        
+    select_nested = [f[1:] for f in result]
+    select_flat = [i for j in select_nested for i in j]
+    return select_flat
